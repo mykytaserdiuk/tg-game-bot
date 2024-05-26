@@ -23,6 +23,7 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 # Copy binary and config files from /build 
 # to root folder of scratch container.
 COPY --from=builder ["/build/main", "/"]
-
+EXPOSE 3000
+EXPOSE 3001
 # Command to run when starting the container.
 ENTRYPOINT ["/main"]

@@ -10,6 +10,8 @@ services:
     restart: on-failure
     build:
       context: ./api
+    ports:
+      - 3000:3001
 
   # Bot UI in development mode
   bot-ui:
@@ -26,6 +28,8 @@ services:
   # Nginx proxy to forward request to UI and API
   dev-proxy:
     image: nginx:stable-alpine
+    ports:
+      - 3000:3000
     environment:
       PORT: 3000
       API_URL: http://bot-api:3000
@@ -36,8 +40,15 @@ services:
 
   # Ngrok service
   ngrok:
-    image: ngrok/ngrok:alpine
+    image: wernight/ngrok 
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
     restart: on-failure
-    command: ["http", "--domain=${NGROK_DOMAIN}", "dev-proxy:3000", "--log=stdout"]
+    networks:
+      - webnet
+    volumes:
+      - ./ngrok.yml:/etc/ngrok.yml
+    command: ["ngrok", "http", "--domain=hornet-driving-loosely.ngrok-free.app", "3000"]
+
+networks:
+  webnet:

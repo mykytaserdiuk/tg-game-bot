@@ -1,0 +1,7 @@
+version: "2"
+authtoken: ${NGROK_AUTHTOKEN}
+tunnels:
+  web:
+    addr: 3000
+    proto: http
+    domain: ${NGROK_DOMAIN}
